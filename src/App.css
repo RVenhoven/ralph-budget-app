@@ -26,7 +26,23 @@
 .header-subtitle {
   font-size: 14px;
   color: #52514e;
-  margin: 0;
+  margin: 0 0 1rem;
+}
+
+.refresh-btn {
+  padding: 8px 16px;
+  background: #2a78d6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.refresh-btn:hover {
+  background: #1e5ba3;
 }
 
 .main-content {
@@ -141,32 +157,6 @@
   color: #185fa5;
 }
 
-.placeholder-card {
-  padding: 12px;
-  background: #f1f0ed;
-  border-radius: 8px;
-  border: 0.5px solid #e1e0d9;
-  opacity: 0.6;
-}
-
-.placeholder-label {
-  font-size: 12px;
-  color: #52514e;
-  margin-bottom: 4px;
-}
-
-.placeholder-value {
-  font-size: 18px;
-  font-weight: 500;
-  color: #0b0b0b;
-  margin-bottom: 6px;
-}
-
-.placeholder-note {
-  font-size: 11px;
-  color: #898781;
-}
-
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -205,6 +195,116 @@
   color: #854f0b;
 }
 
+.info-bg {
+  background: #e6f1fb;
+  color: #185fa5;
+}
+
+.error-bg {
+  background: #fadad9;
+  color: #9c3c3a;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e1e0d9;
+  border-top: 3px solid #2a78d6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-banner {
+  background: #fadad9;
+  border: 0.5px solid #c4a9a8;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  color: #9c3c3a;
+}
+
+.error-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.error-content strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.error-content p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.subscriptions-table {
+  background: #ffffff;
+  border: 0.5px solid #e1e0d9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.subscriptions-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.subscriptions-table th {
+  background: #f9f8f7;
+  padding: 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: #52514e;
+  border-bottom: 0.5px solid #e1e0d9;
+}
+
+.subscriptions-table td {
+  padding: 12px;
+  font-size: 14px;
+  color: #0b0b0b;
+  border-bottom: 0.5px solid #f1f0ed;
+}
+
+.subscriptions-table tr:hover {
+  background: #f9f8f7;
+}
+
+.subscriptions-summary {
+  padding: 1rem 12px;
+  background: #f9f8f7;
+  margin: 0;
+  font-size: 12px;
+  color: #52514e;
+  border-top: 0.5px solid #e1e0d9;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #898781;
+  background: #ffffff;
+  border: 0.5px dashed #e1e0d9;
+  border-radius: 8px;
+  margin: 0;
+}
+
 .footer {
   background: #ffffff;
   border-top: 0.5px solid #e1e0d9;
@@ -229,5 +329,18 @@
 
   .cards-grid {
     grid-template-columns: 1fr;
+  }
+
+  .subscriptions-table {
+    overflow-x: auto;
+  }
+
+  .subscriptions-table table {
+    font-size: 12px;
+  }
+
+  .subscriptions-table th,
+  .subscriptions-table td {
+    padding: 8px;
   }
 }
