@@ -1,121 +1,137 @@
-# Ralph's Household Finance Dashboard
+# Ralph's Financial Dashboard
 
-A financial management dashboard for household budgeting, goal tracking, and periodic cost allocation using the "every dollar has a job" methodology.
+A modern, responsive financial dashboard that integrates with Lunch Money API to provide real-time budget tracking and expense analysis.
 
 ## Features
 
-- 📊 Budget tracking with progress visualization
-- 🎯 Savings goals and renovation fund tracking
-- 🚐 Periodic/yearly cost allocation (sinking funds)
-- 📱 Mobile-responsive design
-- 🔄 Ready for Lunch Money API integration
+✅ **Budget Categories** - Track spending against budgets
+✅ **"Every Dollar" Summary** - Zero-based budgeting visualization  
+✅ **Subscriptions & Recurring Costs** - Monitor sinking funds and recurring expenses
+✅ **Real-time Data** - Live data from Lunch Money API
+✅ **Responsive Design** - Works on desktop and mobile devices
 
 ## Tech Stack
 
-- **Frontend**: React 18 + Vite
-- **Styling**: CSS (no dependencies)
-- **Deployment**: Vercel
-
-## Local Development
-
-### Prerequisites
-- Node.js 16+ 
-- npm or yarn
-
-### Setup
-
-1. Clone the repository
-```bash
-git clone https://github.com/YOUR_USERNAME/ralph-budget-app.git
-cd ralph-budget-app
-```
-
-2. Install dependencies
-```bash
-npm install
-```
-
-3. Start development server
-```bash
-npm run dev
-```
-
-The app will open at `http://localhost:5173`
-
-### Build
-
-```bash
-npm run build
-```
-
-Output goes to `dist/` directory
-
-## Deployment to Vercel
-
-### Option A: Via GitHub (Recommended)
-
-1. Push this repository to GitHub:
-```bash
-git remote add origin https://github.com/YOUR_USERNAME/ralph-budget-app.git
-git push -u origin main
-```
-
-2. Go to [Vercel.com](https://vercel.com)
-3. Click "New Project"
-4. Select your GitHub repository
-5. Click "Deploy"
-6. Your app is live! (URL will be shown)
-
-### Option B: Using Vercel CLI
-
-```bash
-npm install -g vercel
-vercel
-```
+- **Frontend:** React 18 + Vite
+- **Backend:** Vercel Serverless Functions
+- **API:** Lunch Money API v1
+- **Styling:** CSS3 with Gradients & Animations
 
 ## Project Structure
 
 ```
 ralph-budget-app/
+├── api/                          # Vercel serverless functions
+│   ├── budgets.js               # Fetch budgets from Lunch Money
+│   ├── transactions.js          # Fetch current month transactions
+│   ├── subscriptions.js         # Fetch recurring expenses
+│   └── summary.js               # Calculate dashboard summary
 ├── src/
-│   ├── components/
-│   │   ├── BudgetCard.jsx        # Budget display component
-│   │   ├── SinkingFundCard.jsx    # Periodic costs component
-│   │   └── SummaryCard.jsx        # Summary display component
-│   ├── App.jsx                    # Main dashboard component
-│   ├── App.css                    # Dashboard styling
-│   └── main.jsx                   # React entry point
-├── index.html                     # HTML template
-├── vite.config.js                 # Vite configuration
-├── package.json                   # Dependencies
-└── README.md                       # This file
+│   ├── App.jsx                  # Main dashboard component
+│   ├── App.css                  # Dashboard styling
+│   ├── main.jsx                 # React entry point
+│   └── components/
+│       ├── BudgetCard.jsx       # Individual budget display
+│       ├── SinkingFundCard.jsx  # Recurring cost display
+│       ├── SummaryCard.jsx      # "Every Dollar" summary
+│       ├── LoadingSpinner.jsx   # Loading state
+│       └── ErrorBanner.jsx      # Error display
+├── index.html                   # HTML entry point
+├── package.json                 # Dependencies
+├── vite.config.js              # Vite configuration
+├── vercel.json                 # Vercel deployment config
+└── README.md                   # This file
 ```
 
-## Current Data
+## API Setup
 
-Using dummy data for proof of concept:
-- **Groceries**: €200 spent of €600 budget
-- **Kitchen Renovation**: €4,000 of €40,000 goal
-- **Caravaning Stalling**: €280 saved of €420 (due in 4 months)
+### 1. Get Your Lunch Money API Key
+
+1. Go to https://lunchmoney.app
+2. Login to your account
+3. Navigate to Settings → Developers
+4. Copy your API key (starts with `sk_`)
+
+### 2. Set Environment Variable in Vercel
+
+1. Go to your Vercel project settings
+2. Navigate to Environment Variables
+3. Add a new variable:
+   - **Name:** `LUNCH_MONEY_API_KEY`
+   - **Value:** Your API key from step 1
+4. Redeploy the project
+
+## Deployment
+
+### One-Time Setup
+
+```bash
+# 1. Clone or download the project
+git clone https://github.com/RVenhoven/ralph-budget-app.git
+cd ralph-budget-app
+
+# 2. Install dependencies
+npm install
+
+# 3. Build for production
+npm run build
+
+# 4. Push to GitHub
+git add .
+git commit -m "Initial commit"
+git push origin main
+```
+
+### Connect to Vercel
+
+1. Go to https://vercel.com
+2. Click "New Project"
+3. Select your GitHub repository
+4. Vercel auto-detects the build configuration
+5. Click "Deploy"
+6. Add environment variable: `LUNCH_MONEY_API_KEY`
+7. Click "Redeploy"
+
+## Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Open http://localhost:5173 in your browser
+```
+
+## Troubleshooting
+
+### "Failed to load dashboard" Error
+
+1. Check that `LUNCH_MONEY_API_KEY` is set in Vercel Environment Variables
+2. Verify the API key starts with `sk_`
+3. Make sure your Lunch Money account is active
+4. Check the browser console for detailed error messages
+
+### API Returns 401
+
+- Your API key may be expired or incorrect
+- Generate a new API key in Lunch Money Settings
+- Update it in Vercel Environment Variables
+- Redeploy the project
 
 ## Next Steps
 
-1. ✅ Deploy to Vercel
-2. 🔄 Integrate Lunch Money API
-3. 📱 Build Sonja's widget version
-4. 🔔 Add push notifications
-5. 🔐 Implement user authentication
+- Add filtering by date range
+- Implement budget vs actual variance analysis
+- Create Android widget for Sonja
+- Add expense categorization
+- Build savings goals tracker
 
-## Contributing
+## Author
 
-This is a personal project for Ralph's household budget management.
+Ralph Venhoven
 
 ## License
 
 MIT
-
----
-
-**Dashboard Status**: Proof of Concept (v0.1)  
-**Last Updated**: September 2026  
-**Ready for**: Lunch Money integration (coming soon)

@@ -1,8 +1,8 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist",
   "devCommand": "npm run dev",
+  "outputDirectory": "dist",
   "env": {
-    "NODE_ENV": "production"
+    "LUNCH_MONEY_API_KEY": "@lunch_money_api_key"
   }
 }

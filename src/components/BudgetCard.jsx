@@ -1,41 +1,23 @@
 export default function BudgetCard({ budget }) {
-  const percentageSpent = Math.round((budget.spent / budget.budget) * 100)
-  const remaining = budget.budget - budget.spent
-  
-  let statusClass = 'badge-success'
-  if (budget.status === 'long-term') {
-    statusClass = 'badge-info'
-  }
+  const spent = budget.spent_amount || 0;
+  const expected = budget.expected_spend || 1;
+  const percentage = Math.min((spent / expected) * 100, 100);
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <span className="card-emoji">{budget.emoji}</span>
-        <h3 className="card-title">{budget.name}</h3>
+    <div className="card budget-card">
+      <h3>{budget.name}</h3>
+      <div className="progress-bar">
+        <div
+          className="progress-fill"
+          style={{ width: `${percentage}%` }}
+        ></div>
       </div>
-      
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', alignItems: 'baseline' }}>
-          <span className="card-amount">€{budget.spent.toLocaleString()}</span>
-          <span className="card-subtext">of €{budget.budget.toLocaleString()}</span>
-        </div>
-        
-        <div className="progress-bar">
-          <div 
-            className="progress-fill" 
-            style={{ width: `${Math.min(percentageSpent, 100)}%` }}
-          />
-        </div>
-      </div>
-
-      <div className="card-stats">
-        <span className="card-stat">Spent: {percentageSpent}%</span>
-        <span className="card-stat">Remaining: €{remaining.toLocaleString()}</span>
-      </div>
-
-      <div className={`card-badge ${statusClass}`}>
-        {budget.statusLabel}
+      <div className="budget-stats">
+        <span>${spent.toFixed(2)} / ${expected.toFixed(2)}</span>
+        <span className={percentage > 100 ? 'over-budget' : ''}>
+          {percentage.toFixed(0)}%
+        </span>
       </div>
     </div>
-  )
+  );
 }

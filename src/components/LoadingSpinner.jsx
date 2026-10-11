@@ -4,5 +4,5 @@ export default function LoadingSpinner() {
       <div className="spinner"></div>
       <p>Loading your financial data...</p>
     </div>
-  )
+  );
 }

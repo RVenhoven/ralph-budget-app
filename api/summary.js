@@ -1,71 +1,60 @@
 export default async function handler(req, res) {
-  try {
-    const apiKey = process.env.LUNCH_MONEY_API_KEY;
-    
-    if (!apiKey) {
-      return res.status(500).json({ error: 'API key not configured' });
-    }
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
+  const apiKey = process.env.LUNCH_MONEY_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'API key not configured' });
+  }
+
+  try {
     // Fetch budgets and transactions in parallel
-    const [budgetsRes, transactionsRes] = await Promise.all([
-      fetch('https://dev.lunchmoney.app/v1/budgets', {
+    const [budgetsRes, transactionsRes, recurringRes] = await Promise.all([
+      fetch('https://api.lunchmoney.app/v1/budgets', {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       }),
-      fetch('https://dev.lunchmoney.app/v1/transactions', {
+      fetch('https://api.lunchmoney.app/v1/transactions', {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
-        }
-      })
+          'Content-Type': 'application/json',
+        },
+      }),
+      fetch('https://api.lunchmoney.app/v1/recurring_expenses', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+      }),
     ]);
 
-    if (!budgetsRes.ok || !transactionsRes.ok) {
-      throw new Error('Failed to fetch data from Lunch Money');
+    if (!budgetsRes.ok || !transactionsRes.ok || !recurringRes.ok) {
+      return res.status(500).json({ error: 'Failed to fetch data from Lunch Money' });
     }
 
-    const budgetsData = await budgetsRes.json();
-    const transactionsData = await transactionsRes.json();
+    const budgets = await budgetsRes.json();
+    const transactions = await transactionsRes.json();
+    const recurring = await recurringRes.json();
 
-    // Process budgets with actual spending
-    const budgets = (budgetsData.budgets || []).map(budget => {
-      const spent = transactionsData.transactions
-        .filter(t => t.category === budget.category)
-        .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+    // Calculate summary data
+    const summary = {
+      totalBudgeted: budgets.budgets?.reduce((sum, b) => sum + (b.expected_spend || 0), 0) || 0,
+      totalSpent: transactions.transactions?.reduce((sum, t) => sum + Math.abs(t.amount || 0), 0) || 0,
+      monthlyRecurring: recurring.recurring_expenses?.reduce((sum, r) => sum + (r.amount || 0), 0) || 0,
+      remaining: 0,
+    };
 
-      return {
-        id: budget.id,
-        category: budget.category,
-        targetAmount: budget.target,
-        spent: parseFloat(spent.toFixed(2)),
-        remaining: parseFloat((budget.target - spent).toFixed(2)),
-        percentage: parseFloat(((spent / budget.target) * 100).toFixed(1)),
-        status: spent > budget.target ? 'over' : spent > (budget.target * 0.8) ? 'warning' : 'on-track'
-      };
-    });
+    summary.remaining = summary.totalBudgeted - summary.totalSpent;
 
-    // Calculate totals
-    const totalBudget = budgets.reduce((sum, b) => sum + b.targetAmount, 0);
-    const totalSpent = budgets.reduce((sum, b) => sum + b.spent, 0);
-    const totalRemaining = totalBudget - totalSpent;
-
-    res.status(200).json({
-      budgets,
-      summary: {
-        totalBudget: parseFloat(totalBudget.toFixed(2)),
-        totalSpent: parseFloat(totalSpent.toFixed(2)),
-        totalRemaining: parseFloat(totalRemaining.toFixed(2)),
-        percentageSpent: parseFloat(((totalSpent / totalBudget) * 100).toFixed(1)),
-        budgetCount: budgets.length
-      }
-    });
+    res.status(200).json(summary);
   } catch (error) {
     console.error('Summary API error:', error);
-    res.status(500).json({ 
-      error: 'Failed to fetch summary data',
-      details: error.message 
-    });
+    res.status(500).json({ error: error.message });
   }
 }

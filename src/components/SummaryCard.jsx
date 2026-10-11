@@ -1,11 +1,27 @@
-export default function SummaryCard({ label, value, detail, type = 'info' }) {
-  const typeClass = type === 'success' ? 'success-bg' : type === 'error' ? 'error-bg' : 'info-bg'
-
+export default function SummaryCard({ summary }) {
   return (
-    <div className={`summary-card ${typeClass}`}>
-      <div className="summary-label">{label}</div>
-      <div className="summary-value">{value}</div>
-      <div className="summary-detail">{detail}</div>
+    <div className="card summary-card">
+      <h2>Every Dollar Summary</h2>
+      <div className="summary-grid">
+        <div className="summary-item">
+          <span className="label">Total Budgeted</span>
+          <span className="value">${summary.totalBudgeted?.toFixed(2) || '0.00'}</span>
+        </div>
+        <div className="summary-item">
+          <span className="label">Total Spent</span>
+          <span className="value spent">${summary.totalSpent?.toFixed(2) || '0.00'}</span>
+        </div>
+        <div className="summary-item">
+          <span className="label">Monthly Recurring</span>
+          <span className="value">${summary.monthlyRecurring?.toFixed(2) || '0.00'}</span>
+        </div>
+        <div className="summary-item">
+          <span className="label">Remaining</span>
+          <span className={`value ${summary.remaining >= 0 ? 'positive' : 'negative'}`}>
+            ${summary.remaining?.toFixed(2) || '0.00'}
+          </span>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
