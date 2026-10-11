@@ -11,21 +11,21 @@ export default async function handler(req, res) {
   try {
     // Fetch budgets and transactions in parallel
     const [budgetsRes, transactionsRes, recurringRes] = await Promise.all([
-      fetch('https://api.lunchmoney.app/v1/budgets', {
+      fetch('https://api.lunchmoney.dev/v1/budgets', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
       }),
-      fetch('https://api.lunchmoney.app/v1/transactions', {
+      fetch('https://api.lunchmoney.dev/v1/transactions', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
       }),
-      fetch('https://api.lunchmoney.app/v1/recurring_expenses', {
+      fetch('https://api.lunchmoney.dev/v1/recurring_expenses', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${apiKey}`,

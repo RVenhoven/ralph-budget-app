@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch('https://api.lunchmoney.app/v1/budgets', {
+    const response = await fetch('https://api.lunchmoney.dev/v1/budgets', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${apiKey}`,

@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     const start = startDate.toISOString().split('T')[0];
     const end = endDate.toISOString().split('T')[0];
 
-    const response = await fetch(`https://api.lunchmoney.app/v1/transactions?start_date=${start}&end_date=${end}`, {
+    const response = await fetch(`https://api.lunchmoney.dev/v1/transactions?start_date=${start}&end_date=${end}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
