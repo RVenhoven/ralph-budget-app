@@ -9,7 +9,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch('https://api.lunchmoney.dev/v1/recurring_expenses', {
+    // Get current month start date for recurring items
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    const start = startDate.toISOString().split('T')[0];
+
+    const response = await fetch(`https://api.lunchmoney.dev/v1/recurring_items?start_date=${start}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${apiKey}`,

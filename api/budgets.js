@@ -9,7 +9,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch('https://api.lunchmoney.dev/v1/budgets', {
+    // Get current month start and end dates
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    const start = startDate.toISOString().split('T')[0];
+    const end = endDate.toISOString().split('T')[0];
+
+    // Budgets endpoint REQUIRES start_date and end_date
+    const response = await fetch(`https://api.lunchmoney.dev/v1/budgets?start_date=${start}&end_date=${end}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
